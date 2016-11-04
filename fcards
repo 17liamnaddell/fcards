@@ -5,8 +5,11 @@ import sys
 from subprocess import call
 import os
 import readline
-from vctrl import vctrl
+import Vctrl
 
+Vctl = Vctrl.Verctrl()
+
+FDIR = os.getcwd()
 
 template = '''
 {
@@ -19,9 +22,9 @@ template = '''
 
 '''
 
-
 home=os.environ['HOME']
 os.chdir(home)
+
 try:
     kfg = open(home + '/.fconfig.json')
 except FileNotFoundError:
@@ -30,9 +33,11 @@ except FileNotFoundError:
     newconfig.write(
 '''{
     "sets": "/home/error/sets"
-    "version": '''+'0l'+'''
 }''')
+
 cfg = open(home + '/.fconfig.json')
+
+
 config=json.load(cfg)
 sets=config['sets']
 
@@ -104,6 +109,7 @@ def findAndSearch():
 
 #test if there is a sets dir and check it against the config file
 #if the sets dir has been moved, search for it. and notify the user
+
 try:
     open(sets)
 except FileNotFoundError:
@@ -118,10 +124,24 @@ if not config['sets'] == sets:
     newconfig.write('''        
     {
     "sets": "''' + sets + '''"
-    "version": "''' + version + '''"
     }''')
 i = 0
-updated, version = vctrl.check_version(sets)
+
+os.chdir(sets)
+updated = Vctl.check_version("https://github.com/17liamnaddell/fcards", sets)
+print("DDO:", updated)
+
+with open(sets + "/VERSION") as version:
+    if version.read() == updated:
+        pass
+    else:
+        version.close()
+        print("updated")
+        #os.remove(sets + "/VERSION")
+        f = open(sets + "/VERSION", "w+")
+        f.write(updated)
+        os.chdir(sets)
+        Vctl.update_and_end(FDIR)
 for arg in sys.argv:
     
     if arg == "-s":
