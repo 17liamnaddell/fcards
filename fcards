@@ -10,7 +10,7 @@ import Vctrl
 Vctl = Vctrl.Verctrl()
 
 FDIR = os.getcwd()
-
+#wow 
 template = '''
 {
     "flashcards": [
