@@ -1,4 +1,4 @@
-#Welcome to  my python certification project
+#MASTER COPY, DO NOT CLONE, IS USELESS
 ##about
 <p>
 This project is my pyfun certification project, I will be creating
